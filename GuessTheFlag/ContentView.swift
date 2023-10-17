@@ -16,33 +16,64 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.blue, .black], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
+            RadialGradient(
+                stops: [
+                    .init(color: Color(red: 0.1, green: 0.2, blue: 0.45), location: 0.3),
+                    .init(color: Color(red: 0.75, green: 0.15, blue: 0.25), location: 0.3)
+                ],
+                center: .top,
+                startRadius: 200,
+                endRadius: 700
+            )
+            .ignoresSafeArea()
             VStack {
-                VStack {
-                    Text("Tap the flag of")
-                        .font(.subheadline)
-                        .fontWeight(.heavy)
-                    Text(countries[correctAnswer])
-                        .font(.largeTitle)
-                        .fontWeight(.semibold)
-                }.foregroundStyle(.white)
-                
-                ForEach(0..<3) { number in
-                    Button{
-                        flagTapped(number)
-                    } label: {
-                        Image(countries[number])
-                            .clipShape(.capsule)
-                            .shadow(radius: 5)
+                Spacer()
+                Text("Guess the flag")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                VStack(spacing: 15) {
+                    VStack {
+                        Text("Tap the flag of")
+                            .foregroundStyle(.secondary)
+                            .font(.subheadline)
+                            .fontWeight(.heavy)
+                        Text(countries[correctAnswer])
+                            .font(.largeTitle)
+                            .fontWeight(.semibold)
+                    }
+                    
+                    ForEach(0..<3) { number in
+                        Button{
+                            flagTapped(number)
+                        } label: {
+                            Image(countries[number])
+                                .clipShape(.capsule)
+                                .shadow(radius: 5)
+                        }
                     }
                 }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+                .background(.regularMaterial)
+                .clipShape(.rect(cornerRadius: 20))
+                
+                Spacer()
+                Spacer()
+                
+                Text("Score ???")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                
+                Spacer()
             }
-        }
-        .alert(scoreTitle, isPresented: $showingScore) {
-            Button("Continue") { askQuestion() }
-        } message: {
-            Text("Your score is ???")
+            .padding()
+            .alert(scoreTitle, isPresented: $showingScore) {
+                Button("Continue") { askQuestion() }
+            } message: {
+                Text("Your score is ???")
+            }
         }
     }
     
